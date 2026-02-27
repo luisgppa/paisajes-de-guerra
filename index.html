@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paisajes de Guerra | Landscapes of War | Luis González Palacios</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #f5f2ed;
+            font-family: 'Source Sans 3', sans-serif;
+            min-height: 100vh;
+            color: #1a1a1a;
+        }
+
+        .language-selector {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            gap: 5px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .language-selector button {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .language-selector button.active {
+            background: #996633;
+            color: white;
+        }
+
+        .language-selector button:hover:not(.active) {
+            background: #f5f2ed;
+        }
+
+        .entrance {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            background: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E"),
+                linear-gradient(180deg, #f5f2ed 0%, #e8e4df 100%);
+            background-blend-mode: overlay;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        header h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4rem;
+            letter-spacing: 0.4em;
+            font-weight: 400;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+
+        header .author {
+            font-size: 1rem;
+            letter-spacing: 0.25em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        header .intro {
+            max-width: 650px;
+            font-size: 0.9rem;
+            line-height: 1.9;
+            color: #555;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        .statement {
+            max-width: 750px;
+            background: #fff;
+            padding: 40px 50px;
+            margin-bottom: 50px;
+            border-left: 4px solid #996633;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .statement p {
+            font-size: 0.85rem;
+            line-height: 2;
+            color: #444;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .statement p:last-child {
+            margin-bottom: 0;
+        }
+
+        .rooms {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .room {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 40px 35px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .room::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #996633, transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .room:hover {
+            background: #fff;
+            border-color: #996633;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+
+        .room:hover::before {
+            opacity: 1;
+        }
+
+        .room h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 0.2em;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            transition: color 0.3s ease;
+        }
+
+        .room:hover h2 {
+            color: #996633;
+        }
+
+        .room .count {
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .room .description {
+            font-size: 0.8rem;
+            color: #666;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .room .enter {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .room:hover .enter {
+            color: #996633;
+        }
+
+        footer {
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 0.7rem;
+            color: #999;
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 700px) {
+            .language-selector {
+                top: 15px;
+                right: 15px;
+            }
+
+            header h1 {
+                font-size: 2.5rem;
+                letter-spacing: 0.25em;
+            }
+
+            .rooms {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .room {
+                padding: 30px 25px;
+            }
+
+            .statement {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="language-selector">
+        <button onclick="setLanguage('es')" class="active" id="btn-es">ES</button>
+        <button onclick="setLanguage('en')" id="btn-en">EN</button>
+    </div>
+
+    <div class="entrance">
+        <header>
+            <h1 data-es="PAISAJES DE GUERRA" data-en="LANDSCAPES OF WAR">PAISAJES DE GUERRA</h1>
+            <p class="author">LUIS GONZÁLEZ PALACIOS</p>
+        </header>
+
+        <div class="statement">
+            <p data-es="Cuando comenzó la devastación en Gaza, sentí la necesidad de preservar algo de ese territorio, de esa memoria amenazada. Posteriormente, Ucrania se sumaría a esta intención de registro." 
+               data-en="When the devastation in Gaza began, I felt the need to preserve something of that territory, of that threatened memory. Subsequently, Ukraine would join this intention to document.">
+                Cuando comenzó la devastación en Gaza, sentí la necesidad de preservar algo de ese territorio, de esa memoria amenazada. Posteriormente, Ucrania se sumaría a esta intención de registro.
+            </p>
+            <p data-es="Me duele el horror en sí y la velocidad con que lo olvidamos. La facilidad con que un hospital bombardeado o una escuela destruida se convierte en noticia de ayer y deja de existir para nosotros." 
+               data-en="The horror itself pains me, and the speed with which we forget it. How easily a bombed hospital or destroyed school becomes yesterday's news and ceases to exist for us.">
+                Me duele el horror en sí y la velocidad con que lo olvidamos. La facilidad con que un hospital bombardeado o una escuela destruida se convierte en noticia de ayer y deja de existir para nosotros.
+            </p>
+            <p data-es="El neurocientífico Rodrigo Quian Quiroga me ayudó a entender cómo el arte puede resistir este olvido. Nuestro cerebro no almacena recuerdos como un disco duro: guarda significados, no detalles. Una misma neurona puede activarse cuando ves la foto de alguien, cuando escuchas su nombre o cuando piensas en esa persona." 
+               data-en="Neuroscientist Rodrigo Quian Quiroga helped me understand how art can resist this forgetting. Our brain doesn't store memories like a hard drive: it keeps meanings, not details. The same neuron can activate when you see someone's photo, when you hear their name, or when you think of that person.">
+                El neurocientífico Rodrigo Quian Quiroga me ayudó a entender cómo el arte puede resistir este olvido. Nuestro cerebro no almacena recuerdos como un disco duro: guarda significados, no detalles. Una misma neurona puede activarse cuando ves la foto de alguien, cuando escuchas su nombre o cuando piensas en esa persona.
+            </p>
+            <p data-es="Paisajes de Guerra recorre lugares concretos de Gaza y Ucrania: puentes destruidos, hospitales bombardeados, centrales eléctricas en ruinas. Cada pieza es una reinterpretación de imágenes de satélite sobre placas de acero reciclado. No hay cuerpos, no hay sangre. Hay coordenadas, texturas de óxido, formas abstractas. Y sin embargo, cuando alguien las mira, algo se activa. No ven una imagen de guerra; sienten el concepto de guerra." 
+               data-en="Landscapes of War traverses specific places in Gaza and Ukraine: destroyed bridges, bombed hospitals, ruined power plants. Each piece is a reinterpretation of satellite images on recycled steel plates. There are no bodies, no blood. There are coordinates, rust textures, abstract forms. And yet, when someone looks at them, something activates. They don't see an image of war; they feel the concept of war.">
+                Paisajes de Guerra recorre lugares concretos de Gaza y Ucrania: puentes destruidos, hospitales bombardeados, centrales eléctricas en ruinas. Cada pieza es una reinterpretación de imágenes de satélite sobre placas de acero reciclado. No hay cuerpos, no hay sangre. Hay coordenadas, texturas de óxido, formas abstractas. Y sin embargo, cuando alguien las mira, algo se activa. No ven una imagen de guerra; sienten el concepto de guerra.
+            </p>
+            <p data-es="La abstracción no es evasión del horror; es una estrategia más potente para inscribirlo en la memoria. El óxido no es deterioro: es el paso del tiempo hecho visible, la marca de que estas piezas están pensadas para durar más que los titulares." 
+               data-en="Abstraction is not an evasion of horror; it is a more powerful strategy to inscribe it in memory. Rust is not deterioration: it is the passage of time made visible, the mark that these pieces are designed to outlast the headlines.">
+                La abstracción no es evasión del horror; es una estrategia más potente para inscribirlo en la memoria. El óxido no es deterioro: es el paso del tiempo hecho visible, la marca de que estas piezas están pensadas para durar más que los titulares.
+            </p>
+        </div>
+
+        <div class="rooms">
+            <div class="room" onclick="window.open('estructura-del-conflicto-bilingue.html', '_blank')">
+                <h2 data-es="ESTRUCTURA DEL CONFLICTO" data-en="STRUCTURE OF CONFLICT">ESTRUCTURA DEL CONFLICTO</h2>
+                <p class="count" data-es="4 obras · Acero reciclado · 68 × 80 cm" data-en="4 works · Recycled steel · 68 × 80 cm">4 obras · Acero reciclado · 68 × 80 cm</p>
+                <p class="description" data-es="Cuatro tiempos de la guerra: la tensión, el colapso, la frágil recomposición y el silencio que no es paz." data-en="Four stages of war: tension, collapse, fragile recomposition, and the silence that is not peace.">Cuatro tiempos de la guerra: la tensión, el colapso, la frágil recomposición y el silencio que no es paz.</p>
+                <span class="enter" data-es="ENTRAR →" data-en="ENTER →">ENTRAR →</span>
+            </div>
+
+            <div class="room" onclick="window.open('piezas-geograficas-bilingue.html', '_blank')">
+                <h2 data-es="PIEZAS GEOGRÁFICAS" data-en="GEOGRAPHIC PIECES">PIEZAS GEOGRÁFICAS</h2>
+                <p class="count" data-es="13 obras · Acero sobre DM · 33 × 43 cm" data-en="13 works · Steel on MDF · 33 × 43 cm">13 obras · Acero sobre DM · 33 × 43 cm</p>
+                <p class="description" data-es="Cada pieza documenta un lugar real donde la guerra ha dejado su huella. Coordenadas GPS de Gaza y Ucrania." data-en="Each piece documents a real place where war has left its mark. GPS coordinates from Gaza and Ukraine.">Cada pieza documenta un lugar real donde la guerra ha dejado su huella. Coordenadas GPS de Gaza y Ucrania.</p>
+                <span class="enter" data-es="ENTRAR →" data-en="ENTER →">ENTRAR →</span>
+            </div>
+
+            <div class="room" onclick="window.open('poemas-visuales-bilingue.html', '_blank')">
+                <h2 data-es="POEMAS VISUALES" data-en="VISUAL POEMS">POEMAS VISUALES</h2>
+                <p class="count" data-es="2 obras · Técnica mixta sobre papel · 59 × 84 cm" data-en="2 works · Mixed media on paper · 59 × 84 cm">2 obras · Técnica mixta sobre papel · 59 × 84 cm</p>
+                <p class="description" data-es="El texto como materia visual. Los nombres de las víctimas configuran el fondo sobre el que se inscribe el símbolo." data-en="Text as visual matter. Victims' names form the background on which the symbol is inscribed.">El texto como materia visual. Los nombres de las víctimas configuran el fondo sobre el que se inscribe el símbolo.</p>
+                <span class="enter" data-es="ENTRAR →" data-en="ENTER →">ENTRAR →</span>
+            </div>
+
+            <div class="room" onclick="window.open('esculturas_bilingue_embebidas.html', '_blank')">
+                <h2 data-es="ESCULTURAS" data-en="SCULPTURES">ESCULTURAS</h2>
+                <p class="count" data-es="2 obras · Madera y hierro" data-en="2 works · Wood and iron">2 obras · Madera y hierro</p>
+                <p class="description" data-es="La materialización vertical del conflicto. Árboles arrancados, arraigos violentados. La madera herida dialoga con el metal." data-en="The vertical materialization of conflict. Uprooted trees, violated roots. Wounded wood dialogues with metal.">La materialización vertical del conflicto. Árboles arrancados, arraigos violentados. La madera herida dialoga con el metal.</p>
+                <span class="enter" data-es="ENTRAR →" data-en="ENTER →">ENTRAR →</span>
+            </div>
+        </div>
+
+        <footer>
+            <p data-es="© 2026 Luis González Palacios · Todos los derechos reservados" data-en="© 2026 Luis González Palacios · All rights reserved">© 2026 Luis González Palacios · Todos los derechos reservados</p>
+        </footer>
+    </div>
+
+    <script>
+        let currentLanguage = 'es';
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            
+            // Actualizar todos los elementos con data-es y data-en
+            document.querySelectorAll('[data-es][data-en]').forEach(el => {
+                el.textContent = el.getAttribute('data-' + lang);
+            });
+        }
+    </script>
+</body>
+</html>
